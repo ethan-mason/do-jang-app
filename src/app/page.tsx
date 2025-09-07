@@ -70,12 +70,12 @@ export default function Home() {
         {items.map((item, idx) => (
           <div
             key={item.id}
-            className="px-4 py-2 bg-slate-100 rounded-lg shadow-sm flex items-center border border-slate-200 relative"
+            className="px-4 py-2 bg-slate-100 rounded-lg flex items-center relative"
           >
             <p>{item.title}</p>
             <button
               onClick={() => setMenuOpenIndex(menuOpenIndex === idx ? null : idx)}
-              className="ml-auto text-slate-400 hover:text-slate-600"
+              className="ml-auto text-slate-400"
             >
               <FiMoreVertical />
             </button>
