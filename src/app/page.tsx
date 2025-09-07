@@ -1,24 +1,60 @@
 "use client";
 import Image from "next/image";
 import { FiMoreVertical, FiPlus } from "react-icons/fi";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function Home() {
-  const [items, setItems] = useState<string[]>([]);
+  const [items, setItems] = useState<{ id: number; title: string }[]>([]);
   const [open, setOpen] = useState(false);
   const [newItem, setNewItem] = useState("");
   const [menuOpenIndex, setMenuOpenIndex] = useState<number | null>(null);
 
-  const addItem = () => {
+  // 初回ロード時にDBからデータ取得
+  useEffect(() => {
+    const fetchItems = async () => {
+      const { data, error } = await supabase
+        .from("items")
+        .select("id, title")
+        .order("created_at", { ascending: true });
+
+      if (error) {
+        console.error(error);
+      } else {
+        setItems(data || []);
+      }
+    };
+
+    fetchItems();
+  }, []);
+
+  // 新しいアイテム追加
+  const addItem = async () => {
     if (newItem.trim() === "") return;
-    setItems([...items, newItem.trim()]);
-    setNewItem("");
-    setOpen(false);
+    const { data, error } = await supabase
+      .from("items")
+      .insert([{ title: newItem.trim() }])
+      .select();
+
+    if (error) {
+      console.error(error);
+    } else if (data) {
+      setItems([...items, data[0]]);
+      setNewItem("");
+      setOpen(false);
+    }
   };
 
-  const removeItem = (index: number) => {
-    setItems(items.filter((_, i) => i !== index));
-    setMenuOpenIndex(null);
+  // アイテム削除
+  const removeItem = async (id: number) => {
+    const { error } = await supabase.from("items").delete().eq("id", id);
+
+    if (error) {
+      console.error(error);
+    } else {
+      setItems(items.filter((item) => item.id !== id));
+      setMenuOpenIndex(null);
+    }
   };
 
   return (
@@ -33,10 +69,10 @@ export default function Home() {
       <div className="flex flex-col space-y-4 mt-6">
         {items.map((item, idx) => (
           <div
-            key={idx}
+            key={item.id}
             className="px-4 py-2 bg-slate-100 rounded-lg shadow-sm flex items-center border border-slate-200 relative"
           >
-            <p>{item}</p>
+            <p>{item.title}</p>
             <button
               onClick={() => setMenuOpenIndex(menuOpenIndex === idx ? null : idx)}
               className="ml-auto text-slate-400 hover:text-slate-600"
@@ -48,8 +84,8 @@ export default function Home() {
             {menuOpenIndex === idx && (
               <div className="absolute top-full right-0 mt-2 w-32 overflow-hidden bg-white border border-slate-200 rounded-lg shadow-lg z-10">
                 <button
-                  onClick={() => removeItem(idx)}
-                  className="w-full text-left px-4 py-2 hover:bg-red-100 text-red-600"
+                  onClick={() => removeItem(item.id)}
+                  className="w-full text-left px-4 py-2 hover:bg-red-100 text-red-600 font-bold"
                 >
                   Delete
                 </button>
