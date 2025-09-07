@@ -3,7 +3,7 @@ import { FiMoreVertical, FiPlus } from "react-icons/fi";
 
 export default function Home() {
   return (
-    <div className="md:max-w-md w-full mx-4 md:mx-auto my-8">
+    <div className="md:max-w-md w-full px-4 md:px-0 md:mx-auto my-8">
       <div className="flex items-center">
         <Image src="/logo.png" alt="Logo" width={100} height={100} className="w-8" />
         <h1 className="font-extrabold text-2xl ml-2">Claro List</h1>
