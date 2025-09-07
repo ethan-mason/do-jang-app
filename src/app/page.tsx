@@ -4,15 +4,21 @@ import { FiMoreVertical, FiPlus } from "react-icons/fi";
 import { useState } from "react";
 
 export default function Home() {
-  const [items, setItems] = useState<string[]>(["Listening to Music"]);
+  const [items, setItems] = useState<string[]>([]);
   const [open, setOpen] = useState(false);
   const [newItem, setNewItem] = useState("");
+  const [menuOpenIndex, setMenuOpenIndex] = useState<number | null>(null);
 
   const addItem = () => {
     if (newItem.trim() === "") return;
     setItems([...items, newItem.trim()]);
     setNewItem("");
     setOpen(false);
+  };
+
+  const removeItem = (index: number) => {
+    setItems(items.filter((_, i) => i !== index));
+    setMenuOpenIndex(null);
   };
 
   return (
@@ -28,18 +34,36 @@ export default function Home() {
         {items.map((item, idx) => (
           <div
             key={idx}
-            className="px-4 py-2 bg-slate-100 rounded-lg shadow-sm flex items-center border border-slate-200"
+            className="px-4 py-2 bg-slate-100 rounded-lg shadow-sm flex items-center border border-slate-200 relative"
           >
             <p>{item}</p>
-            <button className="ml-auto text-slate-400">
+            <button
+              onClick={() => setMenuOpenIndex(menuOpenIndex === idx ? null : idx)}
+              className="ml-auto text-slate-400 hover:text-slate-600"
+            >
               <FiMoreVertical />
             </button>
+
+            {/* メニュー */}
+            {menuOpenIndex === idx && (
+              <div className="absolute top-full right-0 mt-2 w-32 overflow-hidden bg-white border border-slate-200 rounded-lg shadow-lg z-10">
+                <button
+                  onClick={() => removeItem(idx)}
+                  className="w-full text-left px-4 py-2 hover:bg-red-100 text-red-600"
+                >
+                  Delete
+                </button>
+              </div>
+            )}
           </div>
         ))}
 
         {/* Add new item button */}
-        <button onClick={() => setOpen(true)} className="font-bold px-4 py-2 border-slate-200 hover:bg-slate-100 bg-white border rounded-full flex items-center justify-center">
-          <FiPlus className="mr-2 text-lg text-slate-400" />Add a new item
+        <button
+          onClick={() => setOpen(true)}
+          className="font-bold px-4 py-2 border-slate-200 hover:bg-slate-100 bg-white border rounded-full flex items-center justify-center"
+        >
+          <FiPlus className="mr-2 text-lg text-slate-400" /> Add a new item
         </button>
       </div>
 
