@@ -75,7 +75,7 @@ export default function Home() {
             <p>{item.title}</p>
             <button
               onClick={() => setMenuOpenIndex(menuOpenIndex === idx ? null : idx)}
-              className="ml-auto text-slate-400"
+              className="ml-auto text-slate-400 outline-none focus-visible:ring-2 ring-offset-2 duration-200"
             >
               <FiMoreVertical />
             </button>
@@ -95,11 +95,8 @@ export default function Home() {
         ))}
 
         {/* Add new item button */}
-        <button
-          onClick={() => setOpen(true)}
-          className="font-bold px-4 py-2 border-slate-200 hover:bg-slate-100 bg-white border rounded-full flex items-center justify-center"
-        >
-          <FiPlus className="mr-2 text-lg text-slate-400" /> Add a new item
+        <button onClick={() => setOpen(true)} className="font-bold px-4 py-2 border-slate-200 hover:bg-slate-100 bg-white border rounded-full flex items-center justify-center outline-none focus-visible:ring-2 ring-offset-2 duration-200">
+          <FiPlus className="mr-2 text-lg text-slate-400" />Add a new item
         </button>
       </div>
 
@@ -108,23 +105,17 @@ export default function Home() {
         <div className="fixed inset-0 backdrop-blur-sm bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl shadow-lg p-6 w-3/4 md:w-1/4">
             <h2 className="text-xl font-bold mb-4">Add New Item</h2>
-            <input
-              type="text"
-              value={newItem}
-              onChange={(e) => setNewItem(e.target.value)}
-              placeholder="Enter new item"
-              className="w-full border rounded-lg px-4 py-2 mb-4 border-slate-200 placeholder:text-slate-400 outline-none"
-            />
+            <input type="text" value={newItem} onChange={(e) => setNewItem(e.target.value)} placeholder="Enter new item" className="w-full border rounded-lg px-4 py-2 mb-4 border-slate-200 placeholder:text-slate-400  outline-none focus:border-blue-400 focus:ring-2 ring-blue-200 duration-200" />
             <div className="flex justify-end space-x-2">
               <button
                 onClick={() => setOpen(false)}
-                className="px-4 py-2 rounded-full border bg-white border-slate-200 hover:bg-slate-100 font-bold"
+                className="px-4 py-2 rounded-full border bg-white border-slate-200 hover:bg-slate-100 font-bold outline-none focus-visible:ring-2 ring-offset-2 duration-200"
               >
                 Cancel
               </button>
               <button
                 onClick={addItem}
-                className="px-4 py-2 rounded-full bg-slate-900 text-white hover:bg-slate-800 font-bold"
+                className="px-4 py-2 rounded-full bg-slate-900 text-white hover:bg-slate-700 font-bold outline-none focus-visible:ring-2 ring-offset-2 duration-200"
               >
                 Add
               </button>
