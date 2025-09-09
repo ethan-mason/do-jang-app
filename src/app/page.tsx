@@ -91,7 +91,7 @@ export default function Home() {
                 >
                 <button
                   onClick={() => removeItem(item.id)}
-                  className="w-full text-left px-4 py-2 hover:bg-red-50 duration-200 bg-white text-red-600"
+                  className="w-full text-left px-4 py-2 hover:bg-red-50 duration-200 bg-white text-red-600 select-none"
                 >
                   Delete
                 </button>
@@ -101,7 +101,7 @@ export default function Home() {
         ))}
 
         {/* Add new item button */}
-        <button onClick={() => setOpen(true)} className="font-bold px-4 py-2 border-slate-200 hover:bg-slate-100 bg-white border rounded-full flex items-center justify-center outline-none focus-visible:ring-2 ring-offset-2 duration-200">
+        <button onClick={() => setOpen(true)} className="select-none font-bold px-4 py-2 border-slate-200 hover:bg-slate-100 bg-white border rounded-full flex items-center justify-center outline-none focus-visible:ring-2 ring-offset-2 duration-200">
           <FiPlus className="mr-2 text-lg text-slate-400" />Add a new item
         </button>
       </div>
@@ -121,13 +121,13 @@ export default function Home() {
             <div className="flex justify-end space-x-2">
               <button
                 onClick={() => setOpen(false)}
-                className="px-4 py-2 rounded-full border bg-white border-slate-200 hover:bg-slate-100 font-bold outline-none focus-visible:ring-2 ring-offset-2 duration-200"
+                className="select-none px-4 py-2 rounded-full border bg-white border-slate-200 hover:bg-slate-100 font-bold outline-none focus-visible:ring-2 ring-offset-2 duration-200"
               >
                 Cancel
               </button>
               <button
                 onClick={addItem}
-                className="px-4 py-2 rounded-full bg-slate-900 text-white hover:bg-slate-700 font-bold outline-none focus-visible:ring-2 ring-offset-2 duration-200"
+                className="select-none px-4 py-2 rounded-full bg-slate-900 text-white hover:bg-slate-700 font-bold outline-none focus-visible:ring-2 ring-offset-2 duration-200"
               >
                 Add
               </button>
