@@ -70,19 +70,25 @@ export default function Home() {
         {items.map((item, idx) => (
           <div
             key={item.id}
-            className="px-4 py-2 bg-slate-100 rounded-lg flex items-center relative"
+            className="px-4 py-2 bg-slate-100 rounded-lg flex items-start relative"
           >
             <p className="whitespace-pre-line">{item.title}</p>
+            <div className="relative ml-auto">
             <button
               onClick={() => setMenuOpenIndex(menuOpenIndex === idx ? null : idx)}
-              className="ml-auto text-slate-400 outline-none focus-visible:text-slate-600 hover:text-slate-600 duration-200"
+              className="pt-1 ml-auto text-slate-400 outline-none focus-visible:text-slate-600 hover:text-slate-600 duration-200"
             >
               <FiMoreVertical />
             </button>
 
             {/* メニュー */}
-            {menuOpenIndex === idx && (
-              <div className="absolute top-full right-0 mt-2 w-36 overflow-hidden bg-white border border-slate-200 rounded-md shadow-lg z-10">
+              <div
+              className={`absolute right-0 top-full mt-1 w-36 overflow-hidden bg-white border border-slate-200 rounded-md shadow-lg z-10 transform transition duration-200 ease-out
+                ${menuOpenIndex === idx
+                  ? "opacity-100 scale-100 pointer-events-auto"
+                  : "opacity-0 scale-95 pointer-events-none"}
+                  `}
+                >
                 <button
                   onClick={() => removeItem(item.id)}
                   className="w-full text-left px-4 py-2 hover:bg-red-50 duration-200 bg-white text-red-600"
@@ -90,7 +96,7 @@ export default function Home() {
                   Delete
                 </button>
               </div>
-            )}
+            </div>
           </div>
         ))}
 
