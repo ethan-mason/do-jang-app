@@ -72,20 +72,20 @@ export default function Home() {
             key={item.id}
             className="px-4 py-2 bg-slate-100 rounded-lg flex items-center relative"
           >
-            <p>{item.title}</p>
+            <p className="whitespace-pre-line">{item.title}</p>
             <button
               onClick={() => setMenuOpenIndex(menuOpenIndex === idx ? null : idx)}
-              className="ml-auto text-slate-400 outline-none focus-visible:ring-2 ring-offset-2 duration-200"
+              className="ml-auto text-slate-400 outline-none focus-visible:text-slate-600 hover:text-slate-600 duration-200"
             >
               <FiMoreVertical />
             </button>
 
             {/* メニュー */}
             {menuOpenIndex === idx && (
-              <div className="absolute top-full right-0 mt-2 w-32 overflow-hidden bg-white border border-slate-200 rounded-lg shadow-lg z-10">
+              <div className="absolute top-full right-0 mt-2 w-36 overflow-hidden bg-white border border-slate-200 rounded-md shadow-lg z-10">
                 <button
                   onClick={() => removeItem(item.id)}
-                  className="w-full text-left px-4 py-2 hover:bg-red-100 text-red-600 font-bold"
+                  className="w-full text-left px-4 py-2 hover:bg-red-50 duration-200 bg-white text-red-600"
                 >
                   Delete
                 </button>
@@ -105,7 +105,13 @@ export default function Home() {
         <div className="fixed inset-0 backdrop-blur-sm bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl shadow-lg p-6 w-3/4 md:w-1/4">
             <h2 className="text-xl font-bold mb-4">Add New Item</h2>
-            <input type="text" value={newItem} onChange={(e) => setNewItem(e.target.value)} placeholder="Enter new item" className="w-full border rounded-lg px-4 py-2 mb-4 border-slate-200 placeholder:text-slate-400  outline-none focus:border-blue-400 focus:ring-2 ring-blue-200 duration-200" />
+            <textarea
+              value={newItem}
+              onChange={(e) => setNewItem(e.target.value)}
+              placeholder="Enter new item"
+              rows={3}
+              className="w-full border rounded-lg px-4 py-2 mb-4 border-slate-200 placeholder:text-slate-400 outline-none focus:border-blue-400 focus:ring-2 ring-blue-200 duration-200"
+            />
             <div className="flex justify-end space-x-2">
               <button
                 onClick={() => setOpen(false)}
