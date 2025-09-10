@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { FiMoreVertical, FiPlus } from "react-icons/fi";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
 export default function Home() {
@@ -9,6 +9,9 @@ export default function Home() {
   const [open, setOpen] = useState(false);
   const [newItem, setNewItem] = useState("");
   const [menuOpenIndex, setMenuOpenIndex] = useState<number | null>(null);
+
+  // 👇 メニューを参照するための ref
+  const menuRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   // 初回ロード時にDBからデータ取得
   useEffect(() => {
@@ -27,6 +30,24 @@ export default function Home() {
 
     fetchItems();
   }, []);
+
+  // 👇 外側クリックでメニューを閉じる
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        menuOpenIndex !== null &&
+        menuRefs.current[menuOpenIndex] &&
+        !menuRefs.current[menuOpenIndex]?.contains(e.target as Node)
+      ) {
+        setMenuOpenIndex(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [menuOpenIndex]);
 
   // 新しいアイテム追加
   const addItem = async () => {
@@ -72,23 +93,25 @@ export default function Home() {
             key={item.id}
             className="px-4 py-2 bg-slate-100 rounded-lg flex items-start relative"
           >
-            <p className="whitespace-pre-line">{item.title}</p>
-            <div className="relative ml-auto">
-            <button
-              onClick={() => setMenuOpenIndex(menuOpenIndex === idx ? null : idx)}
-              className="pt-1 ml-auto text-slate-400 outline-none focus-visible:text-slate-600 hover:text-slate-600 duration-200"
-            >
-              <FiMoreVertical />
-            </button>
+            <p className="whitespace-pre-line break-all mr-1">{item.title}</p>
+            <div className="relative ml-auto" ref={(el) => {
+    menuRefs.current[idx] = el;
+  }}>
+              <button
+                onClick={() => setMenuOpenIndex(menuOpenIndex === idx ? null : idx)}
+                className="pt-1 ml-auto text-slate-400 outline-none focus-visible:text-slate-600 duration-200"
+              >
+                <FiMoreVertical />
+              </button>
 
-            {/* メニュー */}
+              {/* メニュー */}
               <div
-              className={`absolute right-0 top-full mt-1 w-36 overflow-hidden bg-white border border-slate-200 rounded-md shadow-lg z-10 transform transition duration-200 ease-out
-                ${menuOpenIndex === idx
-                  ? "opacity-100 scale-100 pointer-events-auto"
-                  : "opacity-0 scale-95 pointer-events-none"}
+                className={`absolute right-0 top-full mt-1 w-36 overflow-hidden bg-white border border-slate-200 rounded-md shadow-lg z-10 transform transition duration-200 ease-out
+                  ${menuOpenIndex === idx
+                    ? "opacity-100 scale-100 pointer-events-auto"
+                    : "opacity-0 scale-95 pointer-events-none"}
                   `}
-                >
+              >
                 <button
                   onClick={() => removeItem(item.id)}
                   className="w-full text-left px-4 py-2 hover:bg-red-50 duration-200 bg-white text-red-600 select-none"
@@ -101,7 +124,10 @@ export default function Home() {
         ))}
 
         {/* Add new item button */}
-        <button onClick={() => setOpen(true)} className="select-none font-bold px-4 py-2 border-slate-200 hover:bg-slate-100 bg-white border rounded-full flex items-center justify-center outline-none focus-visible:ring-2 ring-offset-2 duration-200">
+        <button
+          onClick={() => setOpen(true)}
+          className="select-none font-bold px-4 py-2 border-slate-200 hover:bg-slate-100 bg-white border rounded-full flex items-center justify-center outline-none focus-visible:ring-2 ring-offset-2 duration-200"
+        >
           <FiPlus className="mr-2 text-lg text-slate-400" />Add a new item
         </button>
       </div>
