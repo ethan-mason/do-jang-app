@@ -79,15 +79,15 @@ export default function Home() {
   };
 
   return (
-    <div className="md:max-w-md w-full px-4 md:px-0 md:mx-auto my-8">
+    <div className="md:max-w-md w-full px-4 md:px-0 md:mx-auto">
       {/* header */}
-      <div className="flex items-center">
+      <div className="flex items-center bg-white sticky top-0 py-6 z-50">
         <Image src="/logo.png" alt="Logo" width={100} height={100} className="w-8" />
         <h1 className="font-extrabold text-2xl ml-2">Claro List</h1>
       </div>
 
       {/* items */}
-      <div className="flex flex-col space-y-4 mt-6">
+      <div className="flex flex-col space-y-4">
         {items.map((item, idx) => (
           <div
             key={item.id}
@@ -122,12 +122,10 @@ export default function Home() {
             </div>
           </div>
         ))}
+      </div>
 
-        {/* Add new item button */}
-        <button
-          onClick={() => setOpen(true)}
-          className="select-none font-bold px-4 py-2 border-slate-200 hover:bg-slate-100 bg-white border rounded-full flex items-center justify-center outline-none focus-visible:ring-2 ring-offset-2 duration-200"
-        >
+      <div className="w-full sticky bottom-0 bg-white py-6">
+        <button onClick={() => setOpen(true)} className="w-full select-none font-bold px-4 py-2 border-slate-200 hover:bg-slate-100 bg-white border rounded-full flex items-center justify-center outline-none focus-visible:ring-2 ring-offset-2 duration-200">
           <FiPlus className="mr-2 text-lg text-slate-400" />Add a new item
         </button>
       </div>
