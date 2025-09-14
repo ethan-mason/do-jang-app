@@ -4,9 +4,11 @@ import { FiMoreVertical, FiPlus } from "react-icons/fi";
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 export default function Home() {
   const [items, setItems] = useState<{ id: number; title: string }[]>([]);
+  const [loading, setLoading] = useState(true); // ← ローディング状態追加
   const [open, setOpen] = useState(false);
   const [newItem, setNewItem] = useState("");
   const [menuOpenIndex, setMenuOpenIndex] = useState<number | null>(null);
@@ -17,6 +19,7 @@ export default function Home() {
   // 初回ロード時にDBからデータ取得
   useEffect(() => {
     const fetchItems = async () => {
+      setLoading(true);
       const { data, error } = await supabase
         .from("items")
         .select("id, title")
@@ -27,6 +30,7 @@ export default function Home() {
       } else {
         setItems(data || []);
       }
+      setLoading(false); // ← フェッチ完了でローディング終了
     };
 
     fetchItems();
@@ -79,6 +83,24 @@ export default function Home() {
     }
   };
 
+  // 👇 ローディングアニメーションコンポーネント
+  const LoadingDots = () => (
+    <div className="flex justify-center items-center h-40 space-x-2">
+      {[0, 1, 2].map((i) => (
+        <motion.span
+          key={i}
+          className="w-3 h-3 bg-slate-300 rounded-full"
+          animate={{ y: [0, -6, 0] }}
+          transition={{
+            repeat: Infinity,
+            duration: 0.6,
+            delay: i * 0.2,
+          }}
+        />
+      ))}
+    </div>
+  );
+
   return (
     <div className="md:max-w-md w-full px-4 md:px-0 md:mx-auto">
       {/* header */}
@@ -91,44 +113,56 @@ export default function Home() {
 
       {/* items */}
       <div className="flex flex-col space-y-4">
-        {items.map((item, idx) => (
-          <div
-            key={item.id}
-            className="px-4 py-2 bg-slate-100 rounded-lg flex items-start relative"
-          >
-            <p className="whitespace-pre-line break-all mr-1">{item.title}</p>
-            <div className="relative ml-auto" ref={(el) => {
-    menuRefs.current[idx] = el;
-  }}>
-              <button
-                onClick={() => setMenuOpenIndex(menuOpenIndex === idx ? null : idx)}
-                className="pt-1 ml-auto text-slate-400 outline-none focus-visible:text-slate-600 duration-200"
-              >
-                <FiMoreVertical />
-              </button>
-
-              {/* メニュー */}
+        {loading ? (
+          <LoadingDots /> // ← ローディング表示
+        ) : (
+          items.map((item, idx) => (
+            <div
+              key={item.id}
+              className="px-4 py-2 bg-slate-100 rounded-lg flex items-start relative"
+            >
+              <p className="whitespace-pre-line break-all mr-1">{item.title}</p>
               <div
-                className={`absolute right-0 top-full mt-1 w-36 overflow-hidden bg-white border border-slate-200 rounded-md shadow-lg z-10 transform transition duration-200 ease-out
-                  ${menuOpenIndex === idx
-                    ? "opacity-100 scale-100 pointer-events-auto"
-                    : "opacity-0 scale-95 pointer-events-none"}
-                  `}
+                className="relative ml-auto"
+                ref={(el) => {
+                  menuRefs.current[idx] = el;
+                }}
               >
                 <button
-                  onClick={() => removeItem(item.id)}
-                  className="w-full text-left px-4 py-2 hover:bg-red-50 duration-200 bg-white text-red-600 select-none"
+                  onClick={() => setMenuOpenIndex(menuOpenIndex === idx ? null : idx)}
+                  className="pt-1 ml-auto text-slate-400 outline-none focus-visible:text-slate-600 duration-200"
                 >
-                  Delete
+                  <FiMoreVertical />
                 </button>
+
+                {/* メニュー */}
+                <div
+                  className={`absolute right-0 top-full mt-1 w-36 overflow-hidden bg-white border border-slate-200 rounded-md shadow-lg z-10 transform transition duration-200 ease-out
+                  ${
+                    menuOpenIndex === idx
+                      ? "opacity-100 scale-100 pointer-events-auto"
+                      : "opacity-0 scale-95 pointer-events-none"
+                  }
+                  `}
+                >
+                  <button
+                    onClick={() => removeItem(item.id)}
+                    className="w-full text-left px-4 py-2 hover:bg-red-50 duration-200 bg-white text-red-600 select-none"
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
 
       <div className="w-full sticky bottom-0 bg-white py-6">
-        <button onClick={() => setOpen(true)} className="w-full select-none font-bold px-4 py-2 border-slate-200 hover:bg-slate-100 bg-white border rounded-full flex items-center justify-center outline-none focus-visible:ring-2 ring-offset-2 duration-200">
+        <button
+          onClick={() => setOpen(true)}
+          className="w-full select-none font-bold px-4 py-2 border-slate-200 hover:bg-slate-100 bg-white border rounded-full flex items-center justify-center outline-none focus-visible:ring-2 ring-offset-2 duration-200"
+        >
           <FiPlus className="mr-2 text-lg text-slate-400" />Add a new item
         </button>
       </div>
