@@ -4,9 +4,10 @@ import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
+import { formatDistanceToNow } from "date-fns";
 
 export default function Home() {
-  const [items, setItems] = useState<{ id: number; title: string }[]>([]);
+  const [items, setItems] = useState<{ id: number; title: string; created_at: string }[]>([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [newItem, setNewItem] = useState("");
@@ -22,7 +23,7 @@ export default function Home() {
       setLoading(true);
       const { data, error } = await supabase
         .from("items")
-        .select("id, title")
+        .select("id, title, created_at")
         .order("created_at", { ascending: true });
 
       if (error) {
@@ -59,7 +60,7 @@ export default function Home() {
     const { data, error } = await supabase
       .from("items")
       .insert([{ title: newItem.trim() }])
-      .select();
+      .select("id, title, created_at");
 
     if (error) {
       console.error(error);
@@ -113,43 +114,49 @@ export default function Home() {
           items.map((item, idx) => (
             <div
               key={item.id}
-              className="px-4 py-2 bg-slate-100 rounded-lg flex items-start relative"
+              className="px-4 py-2 bg-slate-100 rounded-lg flex flex-col relative"
             >
-              <p className="whitespace-pre-line break-all mr-1">{item.title}</p>
-              <div
-                className="relative ml-auto"
-                ref={(el) => {
-                  menuRefs.current[idx] = el;
-                }}
-              >
-                <button
-                  onClick={() => setMenuOpenIndex(menuOpenIndex === idx ? null : idx)}
-                  className="pt-1 ml-auto text-slate-400 outline-none focus-visible:text-slate-600 duration-200"
-                >
-                  <FiMoreVertical />
-                </button>
-
-                {/* メニュー */}
+              {/* 作成時刻表示 */}
+              <span className="text-xs text-slate-400 mb-1">
+                {formatDistanceToNow(new Date(item.created_at), { addSuffix: true })}
+              </span>
+              <div className="flex items-start">
+                <p className="whitespace-pre-line break-all mr-1">{item.title}</p>
                 <div
-                  className={`absolute right-0 top-full mt-1 w-36 overflow-hidden bg-white border border-slate-200 rounded-md shadow-lg z-10 transform transition duration-200 ease-out
-                  ${
-                    menuOpenIndex === idx
-                      ? "opacity-100 scale-100 pointer-events-auto"
-                      : "opacity-0 scale-95 pointer-events-none"
-                  }
-                  `}
+                  className="relative ml-auto"
+                  ref={(el) => {
+                    menuRefs.current[idx] = el;
+                  }}
                 >
                   <button
-                    onClick={() => removeItem(item.id)}
-                    disabled={deletingId === item.id}
-                    tabIndex={menuOpenIndex === idx ? 0 : -1}
-                    className="w-full text-left px-4 py-2 hover:bg-red-50 focus-visible:bg-red-50 duration-200 bg-white text-red-600 select-none flex items-center"
+                    onClick={() => setMenuOpenIndex(menuOpenIndex === idx ? null : idx)}
+                    className="pt-1 ml-auto text-slate-400 outline-none focus-visible:text-slate-600 duration-200"
                   >
-                    {deletingId === item.id ? (
-                      <FiLoader className="animate-spin mr-2" />
-                    ) : null}
-                    Delete
+                    <FiMoreVertical />
                   </button>
+
+                  {/* メニュー */}
+                  <div
+                    className={`absolute right-0 top-full mt-1 w-36 overflow-hidden bg-white border border-slate-200 rounded-md shadow-lg z-10 transform transition duration-200 ease-out
+                    ${
+                      menuOpenIndex === idx
+                        ? "opacity-100 scale-100 pointer-events-auto"
+                        : "opacity-0 scale-95 pointer-events-none"
+                    }
+                    `}
+                  >
+                    <button
+                      onClick={() => removeItem(item.id)}
+                      disabled={deletingId === item.id}
+                      tabIndex={menuOpenIndex === idx ? 0 : -1}
+                      className="w-full text-left px-4 py-2 hover:bg-red-50 focus-visible:bg-red-50 duration-200 bg-white text-red-600 select-none flex items-center"
+                    >
+                      {deletingId === item.id ? (
+                        <FiLoader className="animate-spin mr-2" />
+                      ) : null}
+                      Delete
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -174,9 +181,9 @@ export default function Home() {
             <textarea
               value={newItem}
               onChange={(e) => setNewItem(e.target.value)}
-              placeholder="Enter new item"
+              placeholder="Enter new item..."
               rows={3}
-              className="w-full border rounded-lg px-4 py-2 mb-4 border-slate-200 placeholder:text-slate-400 outline-none focus:border-blue-400 focus:ring-2 ring-blue-200 duration-200"
+              className="placeholder:text-sm w-full border rounded-lg px-4 py-2 mb-4 border-slate-200 placeholder:text-slate-400 outline-none focus:border-blue-400 focus:ring-2 ring-blue-200 duration-200"
             />
             <div className="flex justify-end space-x-2">
               <button
