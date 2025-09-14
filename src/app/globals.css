@@ -92,22 +92,14 @@ body {
 /* --- lists --- */
 .md ul,
 .md ol {
-  margin: 0.5rem 0 1rem 1.25rem;
   padding: 0;
-  list-style: initial;
+  list-style-position: inside;
 }
-
-.md li {
-  margin: 0.35rem 0;
+.md ul {
+  list-style-type: disc; /* ● にする */
 }
-
-/* nested lists spacing */
-.md ul ul,
-.md ol ol,
-.md ul ol,
-.md ol ul {
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
+.md ol {
+  list-style-type: decimal; /* 1. 2. 3. にする */
 }
 
 /* --- hr --- */
