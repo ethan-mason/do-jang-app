@@ -1,10 +1,9 @@
 "use client";
-import Image from "next/image";
 import { FiMoreVertical, FiPlus, FiLoader } from "react-icons/fi";
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import Link from "next/link";
 import { motion } from "framer-motion";
+import Header from "@/components/Header";
 
 export default function Home() {
   const [items, setItems] = useState<{ id: number; title: string }[]>([]);
@@ -86,7 +85,7 @@ export default function Home() {
   };
 
   const LoadingDots = () => (
-    <div className="flex justify-center items-center h-48 space-x-2">
+    <div className="flex justify-center items-center h-40 space-x-2">
       {[0, 1, 2].map((i) => (
         <motion.span
           key={i}
@@ -104,13 +103,7 @@ export default function Home() {
 
   return (
     <div className="md:max-w-md w-full px-4 md:px-0 md:mx-auto">
-      {/* header */}
-      <div className="flex bg-white sticky top-0 py-6 z-50">
-        <Link href="/" className="flex items-center">
-          <Image src="/logo.svg" alt="Logo" width={100} height={100} className="w-8 select-none" />
-          <h1 className="font-extrabold text-2xl ml-2">DoJang</h1>
-        </Link>
-      </div>
+      <Header />
 
       {/* items */}
       <div className="flex flex-col space-y-4">
