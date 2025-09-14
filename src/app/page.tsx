@@ -5,6 +5,7 @@ import { supabase } from "@/lib/supabaseClient";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import { formatDistanceToNow } from "date-fns";
+import Button from "@/components/ui/Button";
 
 export default function Home() {
   const [items, setItems] = useState<{ id: number; title: string; created_at: string }[]>([]);
@@ -167,12 +168,9 @@ export default function Home() {
       </div>
 
       <div className="w-full sticky bottom-0 bg-white py-6 px-4 md:px-0">
-        <button
-          onClick={() => setOpen(true)}
-          className="w-full select-none font-bold px-4 py-2 border-slate-200 hover:bg-slate-100 bg-white border rounded-full flex items-center justify-center outline-none focus-visible:ring-2 ring-offset-2 duration-200"
-        >
-          <FiPlus className="mr-2 text-lg text-slate-400" />Add a new item
-        </button>
+        <Button variant="secondary" onClick={() => setOpen(true)} className="w-full" icon={<FiPlus className="text-slate-400" />}>
+          Add a new item
+        </Button>
       </div>
 
       {/* Modal */}
@@ -188,21 +186,12 @@ export default function Home() {
               className="placeholder:text-sm w-full border rounded-lg px-4 py-2 mb-4 border-slate-200 placeholder:text-slate-400 outline-none focus:border-blue-400 focus:ring-2 ring-blue-200 duration-200"
             />
             <div className="flex justify-end space-x-2">
-              <button
-                onClick={() => setOpen(false)}
-                disabled={isAdding}
-                className="select-none px-4 py-2 rounded-full border bg-white border-slate-200 hover:bg-slate-100 font-bold outline-none focus-visible:ring-2 ring-offset-2 duration-200 disabled:opacity-50"
-              >
+              <Button variant="secondary" onClick={() => setOpen(false)} disabled={isAdding}>
                 Cancel
-              </button>
-              <button
-                onClick={addItem}
-                disabled={isAdding}
-                className="select-none px-4 py-2 rounded-full bg-slate-900 text-white hover:bg-slate-700 font-bold outline-none focus-visible:ring-2 ring-offset-2 duration-200 disabled:opacity-50 flex items-center"
-              >
-                {isAdding ? <FiLoader className="animate-spin mr-2" /> : null}
+              </Button>
+              <Button onClick={addItem} disabled={isAdding} icon={isAdding ? <FiLoader className="animate-spin" /> : undefined}>
                 Add
-              </button>
+              </Button>
             </div>
           </div>
         </div>
