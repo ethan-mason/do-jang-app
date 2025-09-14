@@ -21,3 +21,16 @@ export const metadata: Metadata = {
     type: "website",
   },
 };
+
+// 👇 default export で `RootLayout` を返す必要がある
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  );
+}
