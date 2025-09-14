@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { FiMoreVertical, FiPlus } from "react-icons/fi";
+import { FiMoreVertical, FiPlus, FiLoader } from "react-icons/fi";
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
@@ -8,15 +8,17 @@ import { motion } from "framer-motion";
 
 export default function Home() {
   const [items, setItems] = useState<{ id: number; title: string }[]>([]);
-  const [loading, setLoading] = useState(true); // ← ローディング状態追加
+  const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [newItem, setNewItem] = useState("");
   const [menuOpenIndex, setMenuOpenIndex] = useState<number | null>(null);
 
-  // 👇 メニューを参照するための ref
+  // 追加・削除の処理中フラグ
+  const [isAdding, setIsAdding] = useState(false);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
+
   const menuRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  // 初回ロード時にDBからデータ取得
   useEffect(() => {
     const fetchItems = async () => {
       setLoading(true);
@@ -30,13 +32,12 @@ export default function Home() {
       } else {
         setItems(data || []);
       }
-      setLoading(false); // ← フェッチ完了でローディング終了
+      setLoading(false);
     };
 
     fetchItems();
   }, []);
 
-  // 👇 外側クリックでメニューを閉じる
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (
@@ -57,6 +58,7 @@ export default function Home() {
   // 新しいアイテム追加
   const addItem = async () => {
     if (newItem.trim() === "") return;
+    setIsAdding(true);
     const { data, error } = await supabase
       .from("items")
       .insert([{ title: newItem.trim() }])
@@ -69,10 +71,12 @@ export default function Home() {
       setNewItem("");
       setOpen(false);
     }
+    setIsAdding(false);
   };
 
   // アイテム削除
   const removeItem = async (id: number) => {
+    setDeletingId(id);
     const { error } = await supabase.from("items").delete().eq("id", id);
 
     if (error) {
@@ -81,11 +85,11 @@ export default function Home() {
       setItems(items.filter((item) => item.id !== id));
       setMenuOpenIndex(null);
     }
+    setDeletingId(null);
   };
 
-  // 👇 ローディングアニメーションコンポーネント
   const LoadingDots = () => (
-    <div className="flex justify-center items-center h-40 space-x-2">
+    <div className="flex justify-center items-center h-48 space-x-2">
       {[0, 1, 2].map((i) => (
         <motion.span
           key={i}
@@ -114,7 +118,7 @@ export default function Home() {
       {/* items */}
       <div className="flex flex-col space-y-4">
         {loading ? (
-          <LoadingDots /> // ← ローディング表示
+          <LoadingDots />
         ) : (
           items.map((item, idx) => (
             <div
@@ -147,8 +151,12 @@ export default function Home() {
                 >
                   <button
                     onClick={() => removeItem(item.id)}
-                    className="w-full text-left px-4 py-2 hover:bg-red-50 duration-200 bg-white text-red-600 select-none"
+                    disabled={deletingId === item.id}
+                    className="w-full text-left px-4 py-2 hover:bg-red-50 duration-200 bg-white text-red-600 select-none flex items-center"
                   >
+                    {deletingId === item.id ? (
+                      <FiLoader className="animate-spin mr-2" />
+                    ) : null}
                     Delete
                   </button>
                 </div>
@@ -182,14 +190,17 @@ export default function Home() {
             <div className="flex justify-end space-x-2">
               <button
                 onClick={() => setOpen(false)}
-                className="select-none px-4 py-2 rounded-full border bg-white border-slate-200 hover:bg-slate-100 font-bold outline-none focus-visible:ring-2 ring-offset-2 duration-200"
+                disabled={isAdding}
+                className="select-none px-4 py-2 rounded-full border bg-white border-slate-200 hover:bg-slate-100 font-bold outline-none focus-visible:ring-2 ring-offset-2 duration-200 disabled:opacity-50"
               >
                 Cancel
               </button>
               <button
                 onClick={addItem}
-                className="select-none px-4 py-2 rounded-full bg-slate-900 text-white hover:bg-slate-700 font-bold outline-none focus-visible:ring-2 ring-offset-2 duration-200"
+                disabled={isAdding}
+                className="select-none px-4 py-2 rounded-full bg-slate-900 text-white hover:bg-slate-700 font-bold outline-none focus-visible:ring-2 ring-offset-2 duration-200 disabled:opacity-50 flex items-center"
               >
+                {isAdding ? <FiLoader className="animate-spin mr-2" /> : null}
                 Add
               </button>
             </div>
