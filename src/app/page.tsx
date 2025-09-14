@@ -103,11 +103,11 @@ export default function Home() {
   );
 
   return (
-    <div className="md:max-w-md w-full px-4 md:px-0 md:mx-auto">
+    <div className="md:max-w-md w-full md:mx-auto">
       <Header />
 
       {/* items */}
-      <div className="flex flex-col space-y-4">
+      <div className="flex flex-col space-y-4 px-4 md:px-0">
         {loading ? (
           <LoadingDots />
         ) : (
