@@ -3,6 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "DoJang",
+  description: "Your ultimate task master!",
 };
 
 export default function RootLayout({
