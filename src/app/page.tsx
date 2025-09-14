@@ -25,6 +25,35 @@ export default function Home() {
 
   const menuRefs = useRef<(HTMLDivElement | null)[]>([]);
 
+  // ヘッダーの表示制御
+  const [showHeader, setShowHeader] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentY = window.scrollY;
+
+      if (currentY > 80) {
+        if (currentY > lastScrollY) {
+          // 下スクロール → 隠す
+          setShowHeader(false);
+        } else {
+          // 上スクロール → 表示
+          setShowHeader(true);
+        }
+      } else {
+        // 80px未満 → 常に表示
+        setShowHeader(true);
+      }
+
+      setLastScrollY(currentY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
+
+  // データ取得
   useEffect(() => {
     const fetchItems = async () => {
       setLoading(true);
@@ -44,6 +73,7 @@ export default function Home() {
     fetchItems();
   }, []);
 
+  // メニュー外クリックで閉じる
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (
@@ -61,6 +91,7 @@ export default function Home() {
     };
   }, [menuOpenIndex]);
 
+  // アイテム追加
   const addItem = async () => {
     if (newItem.trim() === "") return;
     setIsAdding(true);
@@ -79,6 +110,7 @@ export default function Home() {
     setIsAdding(false);
   };
 
+  // アイテム削除
   const removeItem = async (id: number) => {
     setDeletingId(id);
     const { error } = await supabase.from("items").delete().eq("id", id);
@@ -92,11 +124,13 @@ export default function Home() {
     setDeletingId(null);
   };
 
+  // 編集開始
   const startEdit = (item: { id: number; title: string }) => {
     setEditingItem(item);
     setMenuOpenIndex(null);
   };
 
+  // 編集保存
   const saveEdit = async () => {
     if (!editingItem) return;
     setIsEditing(true);
@@ -115,6 +149,7 @@ export default function Home() {
     setIsEditing(false);
   };
 
+  // ローディング中のアニメーション
   const LoadingDots = () => (
     <div className="flex justify-center items-center h-64 space-x-2">
       {[0, 1, 2].map((i) => (
@@ -134,7 +169,15 @@ export default function Home() {
 
   return (
     <div className="md:max-w-md w-full md:mx-auto">
-      <Header />
+      {/* motion でヘッダー */}
+      <motion.div
+        initial={{ y: 0 }}
+        animate={{ y: showHeader ? 0 : "-100%" }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="sticky top-0 z-50"
+      >
+        <Header />
+      </motion.div>
 
       {/* items */}
       <div className="flex flex-col space-y-4 px-4 md:px-0">
@@ -216,12 +259,29 @@ export default function Home() {
         </Button>
       </div>
 
-      <Modal isOpen={open} onClose={() => setOpen(false)} title="Add New Item" value={newItem} onChange={setNewItem} onSubmit={addItem} loading={isAdding} submitLabel="Add"/>
+      <Modal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        title="Add New Item"
+        value={newItem}
+        onChange={setNewItem}
+        onSubmit={addItem}
+        loading={isAdding}
+        submitLabel="Add"
+      />
 
-      <Modal isOpen={!!editingItem} onClose={() => setEditingItem(null)} title="Edit Item" value={editingItem?.title || ""}
+      <Modal
+        isOpen={!!editingItem}
+        onClose={() => setEditingItem(null)}
+        title="Edit Item"
+        value={editingItem?.title || ""}
         onChange={(val) =>
           setEditingItem((prev) => (prev ? { ...prev, title: val } : prev))
-        } onSubmit={saveEdit} loading={isEditing} submitLabel="Save" />
+        }
+        onSubmit={saveEdit}
+        loading={isEditing}
+        submitLabel="Save"
+      />
     </div>
   );
 }
