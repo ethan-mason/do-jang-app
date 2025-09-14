@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     siteName: "DoJang",
     images: [
       {
-        url: "https://yourdomain.com/og-image.png",
+        url: "https://raw.githubusercontent.com/ethan-mason/claro-list/refs/heads/main/public/og-image.png",
         width: 1200,
         height: 630,
         alt: "DoJang - Your ultimate task master!",
