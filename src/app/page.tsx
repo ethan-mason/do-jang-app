@@ -83,7 +83,7 @@ export default function Home() {
       {/* header */}
       <div className="flex items-center bg-white sticky top-0 py-6 z-50">
         <Image src="/logo.png" alt="Logo" width={100} height={100} className="w-8" />
-        <h1 className="font-extrabold text-2xl ml-2">Claro List</h1>
+        <h1 className="font-extrabold text-2xl ml-2">NoteJang</h1>
       </div>
 
       {/* items */}
