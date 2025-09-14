@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import { formatDistanceToNow } from "date-fns";
 import Button from "@/components/ui/Button";
+import Modal from "@/components/ui/Modal";
 
 export default function Home() {
   const [items, setItems] = useState<{ id: number; title: string; created_at: string }[]>([]);
@@ -162,7 +163,6 @@ export default function Home() {
                     <FiMoreVertical />
                   </button>
 
-                  {/* メニュー内容 */}
                   <div
                     className={`absolute right-0 top-full mt-1 w-36 overflow-hidden bg-white border border-slate-200 rounded-md shadow-lg z-10 transform transition duration-200 ease-out
                     ${
@@ -204,52 +204,27 @@ export default function Home() {
         </Button>
       </div>
 
-      {/* Add Modal */}
-      {open && (
-        <div className="fixed inset-0 backdrop-blur-sm bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-lg p-6 w-3/4 md:w-1/4">
-            <h2 className="text-xl font-bold mb-4">Add New Item</h2>
-            <textarea
-              value={newItem}
-              onChange={(e) => setNewItem(e.target.value)}
-              placeholder="Enter new item..."
-              rows={3}
-              className="placeholder:text-sm w-full border rounded-lg px-4 py-2 mb-4 border-slate-200 placeholder:text-slate-400 outline-none focus:border-blue-400 focus:ring-2 ring-blue-200 duration-200"
-            />
-            <div className="flex justify-end space-x-2">
-              <Button variant="secondary" onClick={() => setOpen(false)} disabled={isAdding}>
-                Cancel
-              </Button>
-              <Button onClick={addItem} disabled={isAdding} icon={isAdding ? <FiLoader className="animate-spin" /> : undefined}>
-                Add
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+      <Modal
+      isOpen={open}
+      onClose={() => setOpen(false)}
+      title="Add New Item"
+      value={newItem}
+      onChange={setNewItem}
+      onSubmit={addItem}
+      loading={isAdding}
+      submitLabel="Add"
+    />
 
-      {/* Edit Modal */}
-      {editingItem && (
-        <div className="fixed inset-0 backdrop-blur-sm bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-lg p-6 w-3/4 md:w-1/4">
-            <h2 className="text-xl font-bold mb-4">Edit Item</h2>
-            <textarea
-              value={editingItem.title}
-              onChange={(e) => setEditingItem({ ...editingItem, title: e.target.value })}
-              rows={3}
-              className="placeholder:text-sm w-full border rounded-lg px-4 py-2 mb-4 border-slate-200 placeholder:text-slate-400 outline-none focus:border-blue-400 focus:ring-2 ring-blue-200 duration-200"
-            />
-            <div className="flex justify-end space-x-2">
-              <Button variant="secondary" onClick={() => setEditingItem(null)} disabled={isEditing}>
-                Cancel
-              </Button>
-              <Button onClick={saveEdit} disabled={isEditing} icon={isEditing ? <FiLoader className="animate-spin" /> : undefined}>
-                Save
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+    <Modal
+      isOpen={!!editingItem}
+      onClose={() => setEditingItem(null)}
+      title="Edit Item"
+      value={editingItem?.title || ""}
+      onChange={(val) => setEditingItem((prev) => (prev ? { ...prev, title: val } : prev))}
+      onSubmit={saveEdit}
+      loading={isEditing}
+      submitLabel="Save"
+    />
     </div>
   );
 }
