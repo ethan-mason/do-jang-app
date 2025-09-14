@@ -13,3 +13,171 @@ body {
   background: var(--background);
   font-family: "Inter", Arial, Helvetica, sans-serif;
 }
+
+/* Markdown styling for container with class `.md` */
+.md {
+  word-break: break-word;
+}
+
+/* --- headings --- */
+.md h1, .md h2, .md h3, .md h4, .md h5, .md h6 {
+  font-weight: 700;
+}
+.md h1 { font-size: 30px; }
+.md h2 { font-size: 24px; }
+.md h3 { font-size: 20px; }
+.md h4 { font-size: 18px; }
+.md h5 { font-size: 16px; }
+.md h6 { font-size: 14px; color: rgba(0, 0, 0, 0.6); }
+
+/* --- links --- */
+.md a {
+  text-decoration: underline;
+}
+.md a:hover,
+.md a:focus {
+  color: #2563eb;
+  outline: none;
+}
+
+/* --- inline code --- */
+.md code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace;
+  font-size: 0.9em;
+  padding: 4px;
+  border-radius: 6px;
+  background: #1e293b;
+  color: #e2e8f0;
+}
+
+/* --- code blocks / pre --- */
+.md pre {
+  padding: 16px;
+  overflow: auto;
+  border-radius: 8px;
+  background: #1e293b;
+  color: #e2e8f0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace;
+  font-size: 0.9rem;
+  white-space: pre;
+}
+
+/* optional: code block caption / language chip */
+.md pre[data-lang] {
+  position: relative;
+  padding-top: 1.6rem;
+}
+.md pre[data-lang]::before {
+  content: attr(data-lang);
+  position: absolute;
+  top: 0.35rem;
+  right: 0.6rem;
+  font-size: 0.72rem;
+  padding: 0.12rem 0.45rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* --- blockquote --- */
+.md blockquote {
+  padding: 12px 12px;
+  border-left: 3px solid #e2e8f0;
+  background: #f8fafc;
+  border-radius: 6px;
+  color: #1e293b;
+  font-style: italic;
+}
+
+/* --- lists --- */
+.md ul,
+.md ol {
+  margin: 0.5rem 0 1rem 1.25rem;
+  padding: 0;
+  list-style: initial;
+}
+
+.md li {
+  margin: 0.35rem 0;
+}
+
+/* nested lists spacing */
+.md ul ul,
+.md ol ol,
+.md ul ol,
+.md ol ul {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+/* --- hr --- */
+.md hr {
+  border: none;
+  height: 2px;
+  background: #e2e8f0;
+  margin: 24px 0;
+  border-radius: 99em;
+}
+
+/* --- tables --- */
+.md table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.6rem 0 1rem 0;
+  font-size: 0.95rem;
+}
+.md thead th {
+  text-align: left;
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  font-weight: 600;
+}
+.md tbody td {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+.md tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* table responsive wrapper (optional) */
+.md .table-wrap {
+  overflow-x: auto;
+  border-radius: 8px;
+}
+
+/* --- images --- */
+.md img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 6px;
+}
+
+/* --- details/summary --- */
+.md details {
+  background: rgba(0,0,0,0.02);
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  margin: 0.5rem 0 1rem 0;
+}
+.md summary {
+  cursor: pointer;
+  font-weight: 600;
+  outline: none;
+}
+
+/* --- small / fine print --- */
+.md small,
+.md .muted {
+  color: rgba(0,0,0,0.6);
+  font-size: 0.9rem;
+}
+
+/* --- footnotes (if any) --- */
+.md .footnotes {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  border-top: 1px dashed rgba(0,0,0,0.06);
+  padding-top: 0.6rem;
+}

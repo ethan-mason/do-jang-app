@@ -146,12 +146,12 @@ export default function Home() {
               className="px-4 py-3 bg-slate-100 rounded-lg flex flex-col relative"
             >
               <div className="relative">
-                <span className="text-xs text-slate-400 mb-1 block">
+                <span className="text-sm mb-2 text-slate-400 block">
                   {formatDistanceToNow(new Date(item.created_at), { addSuffix: true })}
                 </span>
 
                 {/* Markdown 表示 */}
-                <div className="prose prose-sm max-w-none">
+                <div className="md prose prose-sm max-w-none">
                   <ReactMarkdown>{item.title}</ReactMarkdown>
                 </div>
 
@@ -203,7 +203,7 @@ export default function Home() {
         )}
       </div>
 
-      <div className="w-full sticky bottom-0 bg-white py-6 px-4 md:px-0">
+      <div className="w-full sticky bottom-0 bg-white py-4 px-4 md:px-0">
         <Button
           variant="secondary"
           onClick={() => setOpen(true)}
