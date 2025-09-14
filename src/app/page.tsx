@@ -8,6 +8,7 @@ import { formatDistanceToNow } from "date-fns";
 import Button from "@/components/ui/Button";
 import Modal from "@/components/ui/Modal";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export default function Home() {
   const [items, setItems] = useState<{ id: number; title: string; created_at: string }[]>([]);
@@ -150,9 +151,10 @@ export default function Home() {
                   {formatDistanceToNow(new Date(item.created_at), { addSuffix: true })}
                 </span>
 
-                {/* Markdown 表示 */}
-                <div className="md prose prose-sm max-w-none">
-                  <ReactMarkdown>{item.title}</ReactMarkdown>
+                <div className="md prose prose-sm space-y-4 max-w-none">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {item.title}
+                  </ReactMarkdown>
                 </div>
 
                 <div
