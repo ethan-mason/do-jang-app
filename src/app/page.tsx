@@ -116,26 +116,28 @@ export default function Home() {
               key={item.id}
               className="px-4 py-2 bg-slate-100 rounded-lg flex flex-col relative"
             >
-              {/* 作成時刻表示 */}
-              <span className="text-xs text-slate-400 mb-1">
-                {formatDistanceToNow(new Date(item.created_at), { addSuffix: true })}
-              </span>
-              <div className="flex items-start">
+              {/* 時刻 + タイトル + メニューをまとめる */}
+              <div className="relative">
+                <span className="text-xs text-slate-400 mb-1 block">
+                  {formatDistanceToNow(new Date(item.created_at), { addSuffix: true })}
+                </span>
                 <p className="whitespace-pre-line break-all mr-1">{item.title}</p>
+
+                {/* メニュー（右上固定配置） */}
                 <div
-                  className="relative ml-auto"
+                  className="absolute top-0 right-0"
                   ref={(el) => {
                     menuRefs.current[idx] = el;
                   }}
                 >
                   <button
                     onClick={() => setMenuOpenIndex(menuOpenIndex === idx ? null : idx)}
-                    className="pt-1 ml-auto text-slate-400 outline-none focus-visible:text-slate-600 duration-200"
+                    className="pt-2 text-slate-400 outline-none focus-visible:text-slate-600 duration-200"
                   >
                     <FiMoreVertical />
                   </button>
 
-                  {/* メニュー */}
+                  {/* メニュー内容 */}
                   <div
                     className={`absolute right-0 top-full mt-1 w-36 overflow-hidden bg-white border border-slate-200 rounded-md shadow-lg z-10 transform transition duration-200 ease-out
                     ${
