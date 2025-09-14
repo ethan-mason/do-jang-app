@@ -10,6 +10,7 @@ import Modal from "@/components/ui/Modal";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   const [items, setItems] = useState<{ id: number; title: string; created_at: string }[]>([]);
@@ -26,7 +27,6 @@ export default function Home() {
 
   const menuRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  // ヘッダーの表示制御
   const [showHeader, setShowHeader] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
@@ -43,7 +43,6 @@ export default function Home() {
           setShowHeader(true);
         }
       } else {
-        // 80px未満 → 常に表示
         setShowHeader(true);
       }
 
@@ -54,7 +53,6 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
-  // データ取得
   useEffect(() => {
     const fetchItems = async () => {
       setLoading(true);
@@ -74,7 +72,6 @@ export default function Home() {
     fetchItems();
   }, []);
 
-  // メニュー外クリックで閉じる
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (
@@ -92,7 +89,6 @@ export default function Home() {
     };
   }, [menuOpenIndex]);
 
-  // アイテム追加
   const addItem = async () => {
     if (newItem.trim() === "") return;
     setIsAdding(true);
@@ -111,7 +107,6 @@ export default function Home() {
     setIsAdding(false);
   };
 
-  // アイテム削除
   const removeItem = async (id: number) => {
     setDeletingId(id);
     const { error } = await supabase.from("items").delete().eq("id", id);
@@ -125,13 +120,11 @@ export default function Home() {
     setDeletingId(null);
   };
 
-  // 編集開始
   const startEdit = (item: { id: number; title: string }) => {
     setEditingItem(item);
     setMenuOpenIndex(null);
   };
 
-  // 編集保存
   const saveEdit = async () => {
     if (!editingItem) return;
     setIsEditing(true);
@@ -258,6 +251,8 @@ export default function Home() {
           Add a new item
         </Button>
       </div>
+
+      <Footer />
 
       <Modal
         isOpen={open}
