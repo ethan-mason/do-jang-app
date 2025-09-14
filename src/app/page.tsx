@@ -13,7 +13,6 @@ export default function Home() {
   const [newItem, setNewItem] = useState("");
   const [menuOpenIndex, setMenuOpenIndex] = useState<number | null>(null);
 
-  // 追加・削除の処理中フラグ
   const [isAdding, setIsAdding] = useState(false);
   const [deletingId, setDeletingId] = useState<number | null>(null);
 
@@ -55,7 +54,6 @@ export default function Home() {
     };
   }, [menuOpenIndex]);
 
-  // 新しいアイテム追加
   const addItem = async () => {
     if (newItem.trim() === "") return;
     setIsAdding(true);
@@ -74,7 +72,6 @@ export default function Home() {
     setIsAdding(false);
   };
 
-  // アイテム削除
   const removeItem = async (id: number) => {
     setDeletingId(id);
     const { error } = await supabase.from("items").delete().eq("id", id);
