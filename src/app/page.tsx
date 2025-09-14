@@ -17,6 +17,9 @@ export default function Home() {
   const [isAdding, setIsAdding] = useState(false);
   const [deletingId, setDeletingId] = useState<number | null>(null);
 
+  const [editingItem, setEditingItem] = useState<{ id: number; title: string } | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+
   const menuRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
@@ -25,7 +28,7 @@ export default function Home() {
       const { data, error } = await supabase
         .from("items")
         .select("id, title, created_at")
-        .order("created_at", { ascending: true });
+        .order("created_at", { ascending: false });
 
       if (error) {
         console.error(error);
@@ -66,7 +69,7 @@ export default function Home() {
     if (error) {
       console.error(error);
     } else if (data) {
-      setItems([...items, data[0]]);
+      setItems([data[0], ...items]);
       setNewItem("");
       setOpen(false);
     }
@@ -84,6 +87,29 @@ export default function Home() {
       setMenuOpenIndex(null);
     }
     setDeletingId(null);
+  };
+
+  const startEdit = (item: { id: number; title: string }) => {
+    setEditingItem(item);
+    setMenuOpenIndex(null);
+  };
+
+  const saveEdit = async () => {
+    if (!editingItem) return;
+    setIsEditing(true);
+    const { data, error } = await supabase
+      .from("items")
+      .update({ title: editingItem.title })
+      .eq("id", editingItem.id)
+      .select("id, title, created_at");
+
+    if (error) {
+      console.error(error);
+    } else if (data) {
+      setItems(items.map((it) => (it.id === editingItem.id ? data[0] : it)));
+      setEditingItem(null);
+    }
+    setIsEditing(false);
   };
 
   const LoadingDots = () => (
@@ -147,10 +173,17 @@ export default function Home() {
                     `}
                   >
                     <button
+                      onClick={() => startEdit(item)}
+                      tabIndex={menuOpenIndex === idx ? 0 : -1}
+                      className="w-full text-left px-4 py-2 hover:bg-blue-50 focus-visible:bg-blue-50 duration-200 bg-white text-blue-600 select-none outline-none"
+                    >
+                      Edit
+                    </button>
+                    <button
                       onClick={() => removeItem(item.id)}
                       disabled={deletingId === item.id}
                       tabIndex={menuOpenIndex === idx ? 0 : -1}
-                      className="w-full text-left px-4 py-2 hover:bg-red-50 focus-visible:bg-red-50 duration-200 bg-white text-red-600 select-none flex items-center"
+                      className="w-full text-left px-4 py-2 hover:bg-red-50 focus-visible:bg-red-50 duration-200 bg-white text-red-600 select-none flex items-center outline-none"
                     >
                       {deletingId === item.id ? (
                         <FiLoader className="animate-spin mr-2" />
@@ -171,7 +204,7 @@ export default function Home() {
         </Button>
       </div>
 
-      {/* Modal */}
+      {/* Add Modal */}
       {open && (
         <div className="fixed inset-0 backdrop-blur-sm bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl shadow-lg p-6 w-3/4 md:w-1/4">
@@ -189,6 +222,29 @@ export default function Home() {
               </Button>
               <Button onClick={addItem} disabled={isAdding} icon={isAdding ? <FiLoader className="animate-spin" /> : undefined}>
                 Add
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Modal */}
+      {editingItem && (
+        <div className="fixed inset-0 backdrop-blur-sm bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-lg p-6 w-3/4 md:w-1/4">
+            <h2 className="text-xl font-bold mb-4">Edit Item</h2>
+            <textarea
+              value={editingItem.title}
+              onChange={(e) => setEditingItem({ ...editingItem, title: e.target.value })}
+              rows={3}
+              className="placeholder:text-sm w-full border rounded-lg px-4 py-2 mb-4 border-slate-200 placeholder:text-slate-400 outline-none focus:border-blue-400 focus:ring-2 ring-blue-200 duration-200"
+            />
+            <div className="flex justify-end space-x-2">
+              <Button variant="secondary" onClick={() => setEditingItem(null)} disabled={isEditing}>
+                Cancel
+              </Button>
+              <Button onClick={saveEdit} disabled={isEditing} icon={isEditing ? <FiLoader className="animate-spin" /> : undefined}>
+                Save
               </Button>
             </div>
           </div>
