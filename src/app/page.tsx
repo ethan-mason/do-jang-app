@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import { formatDistanceToNow } from "date-fns";
 import Button from "@/components/ui/Button";
 import Modal from "@/components/ui/Modal";
+import ReactMarkdown from "react-markdown";
 
 export default function Home() {
   const [items, setItems] = useState<{ id: number; title: string; created_at: string }[]>([]);
@@ -148,7 +149,11 @@ export default function Home() {
                 <span className="text-xs text-slate-400 mb-1 block">
                   {formatDistanceToNow(new Date(item.created_at), { addSuffix: true })}
                 </span>
-                <p className="whitespace-pre-line break-all mr-1">{item.title}</p>
+
+                {/* Markdown 表示 */}
+                <div className="prose prose-sm max-w-none">
+                  <ReactMarkdown>{item.title}</ReactMarkdown>
+                </div>
 
                 <div
                   className="absolute top-0 right-0"
@@ -199,32 +204,22 @@ export default function Home() {
       </div>
 
       <div className="w-full sticky bottom-0 bg-white py-6 px-4 md:px-0">
-        <Button variant="secondary" onClick={() => setOpen(true)} className="w-full" icon={<FiPlus className="text-slate-400" />}>
+        <Button
+          variant="secondary"
+          onClick={() => setOpen(true)}
+          className="w-full"
+          icon={<FiPlus className="text-slate-400" />}
+        >
           Add a new item
         </Button>
       </div>
 
-      <Modal
-      isOpen={open}
-      onClose={() => setOpen(false)}
-      title="Add New Item"
-      value={newItem}
-      onChange={setNewItem}
-      onSubmit={addItem}
-      loading={isAdding}
-      submitLabel="Add"
-    />
+      <Modal isOpen={open} onClose={() => setOpen(false)} title="Add New Item" value={newItem} onChange={setNewItem} onSubmit={addItem} loading={isAdding} submitLabel="Add"/>
 
-    <Modal
-      isOpen={!!editingItem}
-      onClose={() => setEditingItem(null)}
-      title="Edit Item"
-      value={editingItem?.title || ""}
-      onChange={(val) => setEditingItem((prev) => (prev ? { ...prev, title: val } : prev))}
-      onSubmit={saveEdit}
-      loading={isEditing}
-      submitLabel="Save"
-    />
+      <Modal isOpen={!!editingItem} onClose={() => setEditingItem(null)} title="Edit Item" value={editingItem?.title || ""}
+        onChange={(val) =>
+          setEditingItem((prev) => (prev ? { ...prev, title: val } : prev))
+        } onSubmit={saveEdit} loading={isEditing} submitLabel="Save" />
     </div>
   );
 }
