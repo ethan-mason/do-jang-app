@@ -114,7 +114,7 @@ export default function Home() {
           items.map((item, idx) => (
             <div
               key={item.id}
-              className="px-4 py-2 bg-slate-100 rounded-lg flex flex-col relative"
+              className="px-4 py-3 bg-slate-100 rounded-lg flex flex-col relative"
             >
               {/* 時刻 + タイトル + メニューをまとめる */}
               <div className="relative">
@@ -132,7 +132,7 @@ export default function Home() {
                 >
                   <button
                     onClick={() => setMenuOpenIndex(menuOpenIndex === idx ? null : idx)}
-                    className="pt-2 text-slate-400 outline-none focus-visible:text-slate-600 duration-200"
+                    className="pt-1 text-slate-400 outline-none focus-visible:text-slate-600 duration-200"
                   >
                     <FiMoreVertical />
                   </button>
