@@ -166,7 +166,7 @@ export default function Home() {
         )}
       </div>
 
-      <div className="w-full sticky bottom-0 bg-white py-6">
+      <div className="w-full sticky bottom-0 bg-white py-6 border-t border-slate-200 md:border-none">
         <button
           onClick={() => setOpen(true)}
           className="w-full select-none font-bold px-4 py-2 border-slate-200 hover:bg-slate-100 bg-white border rounded-full flex items-center justify-center outline-none focus-visible:ring-2 ring-offset-2 duration-200"
