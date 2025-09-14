@@ -87,7 +87,7 @@ export default function Home() {
   };
 
   const LoadingDots = () => (
-    <div className="flex justify-center items-center h-40 space-x-2">
+    <div className="flex justify-center items-center h-64 space-x-2">
       {[0, 1, 2].map((i) => (
         <motion.span
           key={i}
@@ -117,14 +117,12 @@ export default function Home() {
               key={item.id}
               className="px-4 py-3 bg-slate-100 rounded-lg flex flex-col relative"
             >
-              {/* 時刻 + タイトル + メニューをまとめる */}
               <div className="relative">
                 <span className="text-xs text-slate-400 mb-1 block">
                   {formatDistanceToNow(new Date(item.created_at), { addSuffix: true })}
                 </span>
                 <p className="whitespace-pre-line break-all mr-1">{item.title}</p>
 
-                {/* メニュー（右上固定配置） */}
                 <div
                   className="absolute top-0 right-0"
                   ref={(el) => {

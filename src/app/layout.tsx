@@ -22,7 +22,6 @@ export const metadata: Metadata = {
   },
 };
 
-// 👇 default export で `RootLayout` を返す必要がある
 export default function RootLayout({
   children,
 }: {
