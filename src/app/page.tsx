@@ -142,7 +142,8 @@ export default function Home() {
                   <button
                     onClick={() => removeItem(item.id)}
                     disabled={deletingId === item.id}
-                    className="w-full text-left px-4 py-2 hover:bg-red-50 duration-200 bg-white text-red-600 select-none flex items-center"
+                    tabIndex={menuOpenIndex === idx ? 0 : -1}
+                    className="w-full text-left px-4 py-2 hover:bg-red-50 focus-visible:bg-red-50 duration-200 bg-white text-red-600 select-none flex items-center"
                   >
                     {deletingId === item.id ? (
                       <FiLoader className="animate-spin mr-2" />
