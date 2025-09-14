@@ -9,6 +9,7 @@ import Button from "@/components/ui/Button";
 import Modal from "@/components/ui/Modal";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import remarkBreaks from "remark-breaks";
 
 export default function Home() {
   const [items, setItems] = useState<{ id: number; title: string; created_at: string }[]>([]);
@@ -169,7 +170,6 @@ export default function Home() {
 
   return (
     <div className="md:max-w-md w-full md:mx-auto">
-      {/* motion でヘッダー */}
       <motion.div
         initial={{ y: 0 }}
         animate={{ y: showHeader ? 0 : "-100%" }}
@@ -195,7 +195,7 @@ export default function Home() {
                 </span>
 
                 <div className="md prose prose-sm space-y-4 max-w-none">
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>
                     {item.title}
                   </ReactMarkdown>
                 </div>
