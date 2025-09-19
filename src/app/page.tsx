@@ -36,10 +36,8 @@ export default function Home() {
 
       if (currentY > 80) {
         if (currentY > lastScrollY) {
-          // 下スクロール → 隠す
           setShowHeader(false);
         } else {
-          // 上スクロール → 表示
           setShowHeader(true);
         }
       } else {
@@ -143,21 +141,24 @@ export default function Home() {
     setIsEditing(false);
   };
 
-  // ローディング中のアニメーション
-  const LoadingDots = () => (
-    <div className="flex justify-center items-center h-64 space-x-2">
-      {[0, 1, 2].map((i) => (
-        <motion.span
-          key={i}
-          className="w-3 h-3 bg-slate-300 rounded-full"
-          animate={{ y: [0, -6, 0] }}
-          transition={{
-            repeat: Infinity,
-            duration: 0.6,
-            delay: i * 0.2,
-          }}
-        />
-      ))}
+  // ローディング中のアニメーション（画面全体に表示）
+  const LoadingOverlay = () => (
+    <div className="fixed inset-0 z-50 flex justify-center items-center bg-white backdrop-blur-sm">
+      <div className="flex space-x-4">
+        {[0, 1, 2].map((i) => (
+          <motion.div
+            key={i}
+            className="w-4 h-4 bg-blue-400 rounded-full"
+            animate={{ y: [0, -15, 0], scale: [1, 1.3, 1] }}
+            transition={{
+              repeat: Infinity,
+              duration: 0.6,
+              delay: i * 0.2,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+      </div>
     </div>
   );
 
@@ -175,12 +176,12 @@ export default function Home() {
       {/* items */}
       <div className="flex flex-col space-y-4 px-4 md:px-0">
         {loading ? (
-          <LoadingDots />
+          <LoadingOverlay />
         ) : (
           items.map((item, idx) => (
             <div
               key={item.id}
-              className="px-4 py-3 bg-slate-100 rounded-lg flex flex-col relative"
+              className="px-4 py-3 bg-slate-100 rounded-lg flex flex-col relative shadow-sm"
             >
               <div className="relative">
                 <span className="text-sm mb-2 text-slate-400 block">
