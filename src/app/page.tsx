@@ -163,7 +163,7 @@ export default function Home() {
   );
 
   return (
-    <div className="md:max-w-md w-full md:mx-auto">
+    <div>
       <motion.div
         initial={{ y: 0 }}
         animate={{ y: showHeader ? 0 : "-100%" }}
@@ -172,7 +172,7 @@ export default function Home() {
       >
         <Header />
       </motion.div>
-
+      <div className="md:max-w-md w-full md:mx-auto">
       {/* items */}
       <div className="flex flex-col space-y-4 px-4 md:px-0">
         {loading ? (
@@ -278,6 +278,7 @@ export default function Home() {
         loading={isEditing}
         submitLabel="Save"
       />
+      </div>
     </div>
   );
 }
