@@ -34,6 +34,11 @@ export default function Home() {
     const handleScroll = () => {
       const currentY = window.scrollY;
 
+      if (window.innerWidth < 768) {
+        setShowHeader(true);
+        return;
+      }
+
       if (currentY > 80) {
         if (currentY > lastScrollY) {
           setShowHeader(false);
