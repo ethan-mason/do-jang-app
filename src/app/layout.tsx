@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "DoJang",
     description: "Your ultimate task master!",
-    url: "https://do-jang.vercel.app",
+    url: "https://djng.vercel.app",
     siteName: "DoJang",
     images: [
       {
