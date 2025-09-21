@@ -11,6 +11,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
 import Footer from "@/components/Footer";
+import LoadingOverlay from "@/components/LoadingOverlay";
 
 export default function Home() {
   const [items, setItems] = useState<{ id: number; title: string; created_at: string }[]>([]);
@@ -146,27 +147,6 @@ export default function Home() {
     setIsEditing(false);
   };
 
-  // ローディング中のアニメーション（画面全体に表示）
-  const LoadingOverlay = () => (
-    <div className="fixed inset-0 z-50 flex justify-center items-center bg-white backdrop-blur-sm">
-      <div className="flex space-x-4">
-        {[0, 1, 2].map((i) => (
-          <motion.div
-            key={i}
-            className="w-4 h-4 bg-blue-400 rounded-full"
-            animate={{ y: [0, -15, 0], scale: [1, 1.3, 1] }}
-            transition={{
-              repeat: Infinity,
-              duration: 0.6,
-              delay: i * 0.2,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-      </div>
-    </div>
-  );
-
   return (
     <div>
       <motion.div
@@ -178,7 +158,6 @@ export default function Home() {
         <Header />
       </motion.div>
       <div className="md:max-w-md w-full md:mx-auto">
-      {/* items */}
       <div className="flex flex-col space-y-4 px-4 md:px-0">
         {loading ? (
           <LoadingOverlay />
@@ -248,41 +227,15 @@ export default function Home() {
       </div>
 
       <div className="w-full sticky bottom-0 bg-white py-4 px-4 md:px-0">
-        <Button
-          variant="secondary"
-          onClick={() => setOpen(true)}
-          className="w-full"
-          icon={<FiPlus className="text-slate-400" />}
-        >
+        <Button variant="secondary" onClick={() => setOpen(true)} className="w-full" icon={<FiPlus className="text-slate-400" />}>
           Add a new item
         </Button>
       </div>
 
       <Footer />
 
-      <Modal
-        isOpen={open}
-        onClose={() => setOpen(false)}
-        title="Add New Item"
-        value={newItem}
-        onChange={setNewItem}
-        onSubmit={addItem}
-        loading={isAdding}
-        submitLabel="Add"
-      />
-
-      <Modal
-        isOpen={!!editingItem}
-        onClose={() => setEditingItem(null)}
-        title="Edit Item"
-        value={editingItem?.title || ""}
-        onChange={(val) =>
-          setEditingItem((prev) => (prev ? { ...prev, title: val } : prev))
-        }
-        onSubmit={saveEdit}
-        loading={isEditing}
-        submitLabel="Save"
-      />
+      <Modal isOpen={open} onClose={() => setOpen(false)} title="Add New Item" value={newItem} onChange={setNewItem} onSubmit={addItem} loading={isAdding} submitLabel="Add" />
+      <Modal isOpen={!!editingItem} onClose={() => setEditingItem(null)} title="Edit Item" value={editingItem?.title || ""} onChange={(val) => setEditingItem((prev) => (prev ? { ...prev, title: val } : prev))} onSubmit={saveEdit} loading={isEditing} submitLabel="Save"/>
       </div>
     </div>
   );
