@@ -193,7 +193,7 @@ export default function Home() {
                   {formatDistanceToNow(new Date(item.created_at), { addSuffix: true })}
                 </span>
 
-                <div className="md prose prose-sm space-y-4 max-w-none">
+                <div className="md prose prose-sm space-y-4 max-w-none max-h-64 overflow-y-auto">
                   <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>
                     {item.title}
                   </ReactMarkdown>
