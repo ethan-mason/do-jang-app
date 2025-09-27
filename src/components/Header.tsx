@@ -7,7 +7,7 @@ export default function Header() {
             <div className="md:max-w-md w-full md:mx-auto">
             <Link href="/" className="flex items-center w-fit">
             <Image src="/logo.svg" alt="Logo" width={100} height={100} className="w-8 select-none" />
-            <h1 className="font-extrabold text-2xl ml-2 header-logo text-black">DoJang</h1>
+            <h1 className="font-bold text-2xl ml-2 header-logo text-black">DoJang</h1>
             </Link>
             </div>
         </div>

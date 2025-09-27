@@ -186,7 +186,7 @@ export default function Home() {
                 >
                   <button
                     onClick={() => setMenuOpenIndex(menuOpenIndex === idx ? null : idx)}
-                    className="mt-1 text-slate-400 outline-none focus-visible:ring-2 duration-200 rounded-full"
+                    className="mt-1 text-slate-400 outline-none focus-visible:ring-2 ring-slate-300 duration-200 rounded-full"
                   >
                     <FiMoreVertical />
                   </button>
