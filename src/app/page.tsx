@@ -203,7 +203,7 @@ export default function Home() {
                     <button
                       onClick={() => startEdit(item)}
                       tabIndex={menuOpenIndex === idx ? 0 : -1}
-                      className="w-full text-left px-4 py-2 hover:bg-blue-50 focus-visible:bg-blue-50 duration-200 bg-white text-blue-600 select-none outline-none"
+                      className="w-full text-left px-4 py-2 hover:bg-slate-100 focus-visible:bg-slate-100 duration-200 bg-white text-slate-700 select-none outline-none"
                     >
                       Edit
                     </button>
