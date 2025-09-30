@@ -1,4 +1,4 @@
-![](https://raw.githubusercontent.com/ethan-mason/claro-list/refs/heads/main/public/og-image.png)
+![](https://raw.githubusercontent.com/ethan-mason/claro-list/refs/heads/main/public/ogimage.png)
 # DoJang - Your ultimate task master!
 It’s truly just a simple task manager! You can add, delete, and edit tasks!
 ## FAQ
