@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import Button from "./ui/Button";
 
 export default function Header() {
     return (
@@ -10,9 +9,6 @@ export default function Header() {
                     <Image src="/logo.svg" alt="Logo" width={100} height={100} className="w-8 select-none" />
                     <h1 className="font-bold text-2xl ml-2 header-logo text-black">DoJang</h1>
                 </Link>
-                <div className="ml-auto">
-                    <Button size="sm">Login</Button>
-                </div>
             </div>
         </div>
     )
